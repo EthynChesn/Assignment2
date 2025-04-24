@@ -2,55 +2,43 @@ from socket import *
 from threading import *
 import sys
 
-Connected = False
+def NewClient(clientSocket, addr):
+    while True:
+        SendThread = Thread(target=Send, args=(clientSocket,addr))
+        SendThread.start()
+        Incoming = clientSocket.recv(1024).decode()
+        if Incoming == 'close':
+            break
+        print(str(addr[0]) + ': ' + Incoming)
+    clientSocket.close()
 
-def ReceiveMessage():
-    global CanReceive
-    if Connected:
-        incoming = Connection.recv(1024).decode()
-        print(incoming)
-        Connection.send(incoming.encode())
+def Send(client, ClientAddr):
+    Outgoing = input()
+    client.send(Outgoing.encode())
+    
 
-def SendMessage():
-    global Connected
-    if Connected:
-        outgoing = input()
-        sys.stdout.write('\x1b[1A')
-        sys.stdout.write('\x1b[2K')
+def main():
+    Host = '0.0.0.0'
+    Port = 12345
 
-        if outgoing == 'close':
-            Connected = False
-        else: 
-            outgoing = "Server Broadcast: " + outgoing
-            print(outgoing)
-            Connection.send(outgoing.encode())
+    serverSocket =  socket(AF_INET, SOCK_STREAM)
 
+    serverSocket.bind((Host, Port))
 
-serverSocket = socket(AF_INET, SOCK_STREAM)
-print('Socket Created')
+    serverSocket.listen(5)
 
-Port = 12345
+    print('Server Open. Waiting for Clients to Connect...')
+    serverMessage = 'Server Broadcast: Thank you for connecting!'
 
-serverSocket.bind(('', Port))
-print('Socket Bound to port 12345')
+    while True:
+        Connection, addr = serverSocket.accept()
+        ClientThread = Thread(target=NewClient, args=(Connection,addr))
+        ClientThread.start()
+        print('Got Connection', addr)
+        Connection.send(serverMessage.encode())
 
-
-serverSocket.listen(5)
-print('Socket is listening')
-
-serverMessage = 'Server Broadcast: Thank you for connecting!'
-
-Connection, addr = serverSocket.accept() 
-print('Got Connection', addr)
-Connected = True
-Connection.send(serverMessage.encode())
-
-
-while Connected:
-    ReceiveThread = Thread(target=ReceiveMessage)
-    ReceiveThread.start()
-    SendThread = Thread(target = SendMessage)
-    SendThread.start()
-
-if not Connected:
     Connection.close()
+    ClientThread.join()
+
+if __name__ == '__main__':
+    main()
