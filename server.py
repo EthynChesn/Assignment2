@@ -16,6 +16,10 @@ def NewClient(clientSocket, addr):
         if Incoming == 'close':
             break
         print(str(addr[0]) + ': ' + Incoming)
+        Incoming = str(addr[0]) + ': ' + Incoming
+        for c in clientlist:
+            if not c == clientSocket:
+                c.send(Incoming.encode())
     clientSocket.close()
     clientlist.remove(clientSocket)
 
@@ -53,7 +57,7 @@ def main():
         ClientThread.start()
         print('Got Connection', addr)
         for c in clientlist:
-            msg = addr[0] + ' has joined!' + '\n'
+            msg = 'Server Broadcast: ' + addr[0] + ' has joined!' + '\n'
             c.send(msg.encode())
         Connection.send(serverMessage.encode())
         Connection.send('Current members: '.encode())
