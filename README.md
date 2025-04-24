@@ -1,1 +1,2 @@
-As of now - it's at least possible for the server and client to communicate without waiting one at a time... but there are Thread errors when the connection is closed. I'm not sure what happens when multiple clients try to connect to the server.
+v1.0 - As of now - it's at least possible for the server and client to communicate without waiting one at a time... but there are Thread errors when the connection is closed. I'm not sure what happens when multiple clients try to connect to the server.
+v2.0 - Server and Client and communicate. No threading errors. Multiple clients connect and can message the server, but the server seems to send messages to a random client
