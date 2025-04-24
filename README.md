@@ -1,0 +1,1 @@
+As of now - it's at least possible for the server and client to communicate without waiting one at a time... but there are Thread errors when the connection is closed. I'm not sure what happens when multiple clients try to connect to the server.
