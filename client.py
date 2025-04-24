@@ -10,13 +10,15 @@ def Send():
     print(IPAddr + ': ' + Outgoing)
 
 hostname = gethostname()
-IPAddr = gethostbyname(hostname) 
+IPAddr = gethostbyname(hostname)
+Server = '10.200.4.67'
 
 clientSocket = socket(AF_INET, SOCK_STREAM)
 Port = 12345
 
-clientSocket.connect(('10.200.4.67', Port))
+clientSocket.connect((Server, Port))
 
+print(clientSocket.recv(1024).decode())
 print(clientSocket.recv(1024).decode())
 
 while True:
@@ -24,4 +26,3 @@ while True:
     SendThread.start()
     Incoming = clientSocket.recv(1024).decode()
     print(Incoming)
-clientSocket.close()
