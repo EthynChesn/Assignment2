@@ -8,3 +8,6 @@ v3.0 - Server now broadcasts to all clients. Server announces when a member has 
 
 
 v4.0 - Clients can now send messages privately, but can't stop sending them once switching. There are many bugs with Private Chat mode.
+
+
+v5.0 - Clients can now exit Private Chat, but the feature is still very buggy between two clients
