@@ -28,7 +28,7 @@ def Send():
         else:
             clientSocket.send(Outgoing.encode())
             if PrivateMode == True:
-                print('[Private Message]'  + IPAddr + ': ' + Outgoing)
+                print('[Private Message]  '  + IPAddr + ': ' + Outgoing)
             else:
                 print(IPAddr + ': ' + Outgoing)
 
