@@ -4,6 +4,7 @@ import sys
 
 PrivateMode = False
 
+#Send function
 def Send():
     global PrivateMode
     while True:
@@ -13,10 +14,12 @@ def Send():
             Outgoing = input()
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
+        #Private mode command, ask for client ID of recipient and send to server
         if Outgoing == '/private':
             PrivateMode = True
             recipient = input('Enter user ID of intended recipient: ')
             clientSocket.send(recipient.encode())
+        #End Private Mode command, send to server
         elif Outgoing == '/end':
             if PrivateMode == True:
                 PrivateMode = False
@@ -25,6 +28,7 @@ def Send():
             else:
                 print('You are not in a Private Chat.')
                 clientSocket.send(Outgoing.encode())
+        #Send message to server. Print on client-side
         else:
             clientSocket.send(Outgoing.encode())
             if PrivateMode == True:
@@ -32,18 +36,23 @@ def Send():
             else:
                 print(IPAddr + ': ' + Outgoing)
 
+#Initiliaze User informatio, server IP, and Port
 hostname = gethostname()
 IPAddr = gethostbyname(hostname)
 Server = '10.200.4.67'
-
-clientSocket = socket(AF_INET, SOCK_STREAM)
 Port = 12345
 
+#Create socket
+clientSocket = socket(AF_INET, SOCK_STREAM)
+
+#Connect client to server
 clientSocket.connect((Server, Port))
 
+#Receive and print initial information
 print(clientSocket.recv(1024).decode())
 print(clientSocket.recv(1024).decode())
 
+#Listen for and receive further information
 while True:
     SendThread = Thread(target = Send)
     SendThread.start()
