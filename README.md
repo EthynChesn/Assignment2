@@ -5,3 +5,6 @@ v2.0 - Server and Client and communicate. No threading errors. Multiple clients 
 
 
 v3.0 - Server now broadcasts to all clients. Server announces when a member has joined, and shows the lists of current members when client first joins. Clients can send messages to server and all clients, but not privately.
+
+
+v4.0 - Clients can now send messages privately, but can't stop sending them once switching. There are many bugs with Private Chat mode.
