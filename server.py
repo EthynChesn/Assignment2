@@ -17,24 +17,22 @@ def NewClient(clientSocket, addr):
         Incoming = clientSocket.recv(1024).decode()
         if Incoming == '/close':
             break
-        if recipient == 'Server':
-            if Incoming in userlist:
-                recipient = Incoming
-            else:
-                print(str(addr[1]) + ': ' + Incoming)
-                Incoming = str(addr[1]) + ': ' + Incoming
-                for c in clientlist:
-                    if not c == clientSocket:
-                        c.send(Incoming.encode())
-        else:
+        while not recipient == 'Server':
             if Incoming == '/end':
-                print('recieved /end')
-                recipient == 'Server'
-                print(recipient)
-            else:
-                Incoming = '[Private Message]  ' + str(addr[1]) + ': ' + Incoming
-                clientdict[recipient].send(Incoming.encode())
-        
+                recipient = 'Server'
+                break
+            Incoming = '[Private Message]  ' + str(addr[1]) + ': ' + Incoming
+            clientdict[recipient].send(Incoming.encode())
+            break
+        if Incoming in userlist:
+            recipient = Incoming
+        elif not Incoming == '/end':
+            print(str(addr[1]) + ': ' + Incoming)
+            Incoming = str(addr[1]) + ': ' + Incoming
+            for c in clientlist:
+                if not c == clientSocket:
+                    c.send(Incoming.encode())
+                
     clientSocket.close()
     clientlist.remove(clientSocket)
     del clientdict[str(addr[1])]
