@@ -38,7 +38,7 @@ def NewClient(clientSocket, addr):
         if Incoming in userlist:
             recipient = Incoming
         #Else (and not /end), print data on server and send to every client
-        elif not Incoming == '/end':
+        elif not Incoming == '/end' and recipient == 'Server':
             print(str(addr[1]) + ': ' + Incoming)
             Incoming = str(addr[1]) + ': ' + Incoming
             for c in clientlist:
